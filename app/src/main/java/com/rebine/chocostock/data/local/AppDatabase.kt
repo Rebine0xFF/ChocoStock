@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [ChocolateEntity::class], version = 1)
+@Database(entities = [ChocolateEntity::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun chocolateDao(): ChocolateDao
@@ -19,7 +19,8 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "chocostock.db"
-                ).build().also { INSTANCE = it }
+                ).fallbackToDestructiveMigration()
+                    .build().also { INSTANCE = it }
             }
         }
     }

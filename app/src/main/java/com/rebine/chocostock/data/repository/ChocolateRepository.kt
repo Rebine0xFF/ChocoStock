@@ -20,5 +20,8 @@ class ChocolateRepository(private val dao: ChocolateDao) {
     }
 }
 
-private fun ChocolateEntity.toDomain() = Chocolate(id, title, expiryDateIso, dateAdded)
-private fun Chocolate.toEntity() = ChocolateEntity(id, title, expiryDateIso, dateAdded)
+private fun ChocolateEntity.toDomain() =
+    Chocolate(id, title, coverImagePath, expiryPhotoPath, expiryDateIso, dateAdded)
+
+private fun Chocolate.toEntity() =
+    ChocolateEntity(id, title, coverImagePath, expiryPhotoPath, expiryDateIso, dateAdded)
