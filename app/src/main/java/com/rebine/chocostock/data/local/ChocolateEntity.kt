@@ -7,6 +7,8 @@ import androidx.room.PrimaryKey
 data class ChocolateEntity(
     @PrimaryKey val id: String,
     val title: String,
+    val coverImagePath: String?,
+    val expiryPhotoPath: String?,
     val expiryDateIso: String?,
     val dateAdded: Long
 )
