@@ -4,6 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.rebine.chocostock.presentation.add.AddChocolateScreen
+import com.rebine.chocostock.presentation.add.AddChocolateViewModel
+import com.rebine.chocostock.presentation.add.AddChocolateViewModelFactory
 import com.rebine.chocostock.presentation.list.ChocolateListScreen
 import com.rebine.chocostock.presentation.list.ChocolateListViewModel
 import com.rebine.chocostock.presentation.list.ChocolateListViewModelFactory
@@ -16,10 +22,29 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ChocoStockTheme {
-                val viewModel: ChocolateListViewModel = viewModel(
-                    factory = ChocolateListViewModelFactory(repository)
-                )
-                ChocolateListScreen(viewModel = viewModel)
+                val navController = rememberNavController()
+
+                NavHost(navController = navController, startDestination = "list") {
+                    composable("list") {
+                        val viewModel: ChocolateListViewModel = viewModel(
+                            factory = ChocolateListViewModelFactory(repository)
+                        )
+                        ChocolateListScreen(
+                            viewModel = viewModel,
+                            onAddClick = { navController.navigate("add") }
+                        )
+                    }
+                    composable("add") {
+                        val viewModel: AddChocolateViewModel = viewModel(
+                            factory = AddChocolateViewModelFactory(repository)
+                        )
+                        AddChocolateScreen(
+                            viewModel = viewModel,
+                            onSaved = { navController.popBackStack() },
+                            onCancel = { navController.popBackStack() }
+                        )
+                    }
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.rebine.chocostock.presentation.list
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,19 +13,21 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.rebine.chocostock.domain.model.Chocolate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChocolateListScreen(viewModel: ChocolateListViewModel) {
+fun ChocolateListScreen(viewModel: ChocolateListViewModel, onAddClick: () -> Unit) {
     val chocolates by viewModel.chocolates.collectAsState()
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("Mon stock de chocolat") }) },
         floatingActionButton = {
-            FloatingActionButton(onClick = { viewModel.addFakeChocolate() }) {
-                Icon(Icons.Default.Add, contentDescription = "Ajouter (test)")
+            FloatingActionButton(onClick = onAddClick) {
+                Icon(Icons.Default.Add, contentDescription = "Ajouter un chocolat")
             }
         }
     ) { padding ->
@@ -48,11 +51,28 @@ fun ChocolateListScreen(viewModel: ChocolateListViewModel) {
 
 @Composable
 fun ChocolateRow(chocolate: Chocolate) {
-    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-        Text(chocolate.title, style = MaterialTheme.typography.titleMedium)
-        Text(
-            text = "Périme le : ${chocolate.expiryDateIso ?: "date inconnue"}",
-            style = MaterialTheme.typography.bodyMedium
-        )
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        chocolate.coverImagePath?.let { path ->
+            Image(
+                painter = rememberAsyncImagePainter(path),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(64.dp)
+                    .padding(end = 16.dp),
+                contentScale = ContentScale.Crop
+            )
+        }
+        Column(modifier = Modifier.weight(1f)) {
+            Text(chocolate.title, style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = "Périme le : ${chocolate.expiryDateIso ?: "date inconnue"}",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
     }
 }

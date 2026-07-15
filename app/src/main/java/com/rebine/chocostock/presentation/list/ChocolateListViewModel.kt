@@ -15,19 +15,6 @@ class ChocolateListViewModel(private val repository: ChocolateRepository) : View
 
     val chocolates: StateFlow<List<Chocolate>> = repository.getAllSortedByExpiry()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
-
-    // TEMP : FOR TESTING ONLY
-    fun addFakeChocolate() {
-        val fakes = listOf(
-            Chocolate(UUID.randomUUID().toString(), "Tablette Lindt Excellence 70%", "2026-09-15", System.currentTimeMillis()),
-            Chocolate(UUID.randomUUID().toString(), "Ferrero Rocher (boîte)", "2026-08-01", System.currentTimeMillis()),
-            Chocolate(UUID.randomUUID().toString(), "Chocolat artisanal noisette", null, System.currentTimeMillis()),
-            Chocolate(UUID.randomUUID().toString(), "Tablette Milka Alpenmilch", "2026-07-30", System.currentTimeMillis())
-        )
-        viewModelScope.launch {
-            repository.addChocolate(fakes.random())
-        }
-    }
 }
 
 class ChocolateListViewModelFactory(private val repository: ChocolateRepository) : ViewModelProvider.Factory {
