@@ -24,7 +24,7 @@ class GeminiApiService(private val apiKey: String) {
         .build()
 
     private val endpoint =
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent"
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent"
 
     private val prompt = """
         Tu es un assistant qui identifie des produits chocolatés à partir de photos, pour une application de gestion de stock personnel.
@@ -62,12 +62,35 @@ class GeminiApiService(private val apiKey: String) {
             }
         }
 
+    private fun compressForUpload(file: File, maxDimension: Int = 1024): ByteArray {
+        val options = android.graphics.BitmapFactory.Options().apply {
+            inJustDecodeBounds = true
+        }
+        android.graphics.BitmapFactory.decodeFile(file.absolutePath, options)
+
+        var sampleSize = 1
+        while (options.outWidth / sampleSize > maxDimension || options.outHeight / sampleSize > maxDimension) {
+            sampleSize *= 2
+        }
+
+        val decodeOptions = android.graphics.BitmapFactory.Options().apply {
+            inSampleSize = sampleSize
+        }
+        val bitmap = android.graphics.BitmapFactory.decodeFile(file.absolutePath, decodeOptions)
+
+        val outputStream = java.io.ByteArrayOutputStream()
+        bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 85, outputStream)
+        bitmap.recycle()
+
+        return outputStream.toByteArray()
+    }
+
     private fun buildRequestBody(coverPhoto: File, expiryPhoto: File): JSONObject {
         val coverBase64 = android.util.Base64.encodeToString(
-            coverPhoto.readBytes(), android.util.Base64.NO_WRAP
+            compressForUpload(coverPhoto), android.util.Base64.NO_WRAP
         )
         val expiryBase64 = android.util.Base64.encodeToString(
-            expiryPhoto.readBytes(), android.util.Base64.NO_WRAP
+            compressForUpload(expiryPhoto), android.util.Base64.NO_WRAP
         )
 
         val parts = JSONArray().apply {
@@ -102,6 +125,7 @@ class GeminiApiService(private val apiKey: String) {
             put("generationConfig", JSONObject().apply {
                 put("response_mime_type", "application/json")
                 put("response_schema", schema)
+                put("thinkingConfig", JSONObject().put("thinkingLevel", "minimal"))
             })
         }
     }
