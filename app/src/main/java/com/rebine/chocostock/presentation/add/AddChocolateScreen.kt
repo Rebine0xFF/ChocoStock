@@ -35,13 +35,15 @@ fun AddChocolateScreen(
         ) { file ->
             expiryPhoto = file
             step = AddStep.REVIEW
+            viewModel.analyzePhotos(file.let { coverPhoto!! }, file)
         }
 
         AddStep.REVIEW -> ReviewStep(
+            viewModel = viewModel,
             coverPhoto = coverPhoto,
             expiryPhoto = expiryPhoto,
-            onConfirm = { 
-                viewModel.saveChocolate(coverPhoto, expiryPhoto, onSaved)
+            onConfirm = { title, expiryDateIso ->
+                viewModel.saveChocolate(title, expiryDateIso, coverPhoto, expiryPhoto, onSaved)
             },
             onCancel = onCancel
         )
@@ -50,29 +52,70 @@ fun AddChocolateScreen(
 
 @Composable
 private fun ReviewStep(
+    viewModel: AddChocolateViewModel,
     coverPhoto: File?,
     expiryPhoto: File?,
-    onConfirm: () -> Unit,
+    onConfirm: (String, String?) -> Unit,
     onCancel: () -> Unit
 ) {
+    val analysisState by viewModel.analysisState.collectAsState()
+
+    var title by remember { mutableStateOf("") }
+    var expiryDateIso by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(analysisState) {
+        if (analysisState is AnalysisState.Success) {
+            val success = analysisState as AnalysisState.Success
+            title = success.title
+            expiryDateIso = success.expiryDateIso
+        }
+    }
+
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text("Vérifie tes photos", style = MaterialTheme.typography.titleLarge)
+        Text("Vérif et corrige si besoin", style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text("Devant de l'emballage")
         Image(
             painter = rememberAsyncImagePainter(coverPhoto),
             contentDescription = null,
-            modifier = Modifier.fillMaxWidth().height(200.dp)
+            modifier = Modifier.fillMaxWidth().height(180.dp)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text("Date de péremption")
-        Image(
-            painter = rememberAsyncImagePainter(expiryPhoto),
-            contentDescription = null,
-            modifier = Modifier.fillMaxWidth().height(150.dp)
+        when (analysisState) {
+            is AnalysisState.Loading -> {
+                Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                    CircularProgressIndicator(modifier = Modifier.size(20.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Analyse en cours...")
+                }
+            }
+            is AnalysisState.Error -> {
+                Text(
+                    "L'analyse automatique a échoué, renseigne les infos manuellement.",
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+            else -> {}
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedTextField(
+            value = title,
+            onValueChange = { title = it },
+            label = { Text("Titre") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedTextField(
+            value = expiryDateIso ?: "",
+            onValueChange = { expiryDateIso = it.ifBlank { null } },
+            label = { Text("Date de péremption (AAAA-MM-JJ)") },
+            modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -82,7 +125,11 @@ private fun ReviewStep(
                 Text("Annuler")
             }
             Spacer(modifier = Modifier.width(8.dp))
-            Button(onClick = onConfirm, modifier = Modifier.weight(1f)) {
+            Button(
+                onClick = { onConfirm(title, expiryDateIso) },
+                enabled = title.isNotBlank(),
+                modifier = Modifier.weight(1f)
+            ) {
                 Text("Ajouter au stock")
             }
         }

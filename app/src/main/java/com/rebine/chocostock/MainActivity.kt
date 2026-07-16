@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.platform.LocalContext
 import com.rebine.chocostock.presentation.add.AddChocolateScreen
 import com.rebine.chocostock.presentation.add.AddChocolateViewModel
 import com.rebine.chocostock.presentation.add.AddChocolateViewModelFactory
@@ -35,8 +36,9 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable("add") {
+                        val application = LocalContext.current.applicationContext as ChocoStockApplication
                         val viewModel: AddChocolateViewModel = viewModel(
-                            factory = AddChocolateViewModelFactory(repository)
+                            factory = AddChocolateViewModelFactory(application.repository, application.geminiApiService)
                         )
                         AddChocolateScreen(
                             viewModel = viewModel,
