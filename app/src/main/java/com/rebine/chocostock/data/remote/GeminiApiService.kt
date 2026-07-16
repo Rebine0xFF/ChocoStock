@@ -37,7 +37,7 @@ class GeminiApiService(private val apiKey: String) {
 
         À partir de la seconde image, lis la date de péremption et retranscris-la strictement au format ISO AAAA-MM-JJ. Si seul le mois est précisé (par exemple "MM/AAAA"), utilise le dernier jour de ce mois. Si la date est illisible, partiellement cachée, ou absente de l'image, renvoie null pour ce champ.
 
-        Règle importante : n'invente jamais une information qui n'est pas clairement visible sur les images. En cas de doute, préfère renvoyer une valeur nulle ou approximative plutôt qu'une valeur inventée.
+        Règle importante : n'invente jamais une information qui n'est pas clairement visible sur les images. Si la date est illisible, partiellement cachée, ou absente de l'image, renvoie une chaîne vide "" pour ce champ.
     """.trimIndent()
 
     suspend fun analyzeChocolate(coverPhoto: File, expiryPhoto: File): ChocolateAnalysisResult =
@@ -90,22 +90,19 @@ class GeminiApiService(private val apiKey: String) {
                     put("description", "Titre court et descriptif du produit chocolaté (max 60 caractères)")
                 })
                 put("date_peremption", JSONObject().apply {
-                    put("type", JSONArray(listOf("string", "null")))
-                    put("description", "Date de péremption au format AAAA-MM-JJ, ou null si illisible")
+                    put("type", "string")
+                    put("description", "Date de péremption au format AAAA-MM-JJ, ou chaîne vide si illisible")
                 })
             })
             put("required", JSONArray(listOf("titre", "date_peremption")))
         }
 
-        val responseFormat = JSONObject().put(
-            "text", JSONObject()
-                .put("mimeType", "application/json")
-                .put("schema", schema)
-        )
-
         return JSONObject().apply {
             put("contents", JSONArray().put(JSONObject().put("parts", parts)))
-            put("generationConfig", JSONObject().put("responseFormat", responseFormat))
+            put("generationConfig", JSONObject().apply {
+                put("response_mime_type", "application/json")
+                put("response_schema", schema)
+            })
         }
     }
 
@@ -122,7 +119,7 @@ class GeminiApiService(private val apiKey: String) {
         val parsed = JSONObject(text)
         return ChocolateAnalysisResult(
             title = parsed.getString("titre"),
-            expiryDateIso = if (parsed.isNull("date_peremption")) null else parsed.getString("date_peremption")
+            expiryDateIso = parsed.getString("date_peremption").ifBlank { null }
         )
     }
 }
