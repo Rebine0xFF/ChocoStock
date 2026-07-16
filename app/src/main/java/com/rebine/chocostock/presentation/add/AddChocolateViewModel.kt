@@ -35,6 +35,7 @@ class AddChocolateViewModel(
                 val result = geminiApiService.analyzeChocolate(coverPhoto, expiryPhoto)
                 _analysisState.value = AnalysisState.Success(result.title, result.expiryDateIso)
             } catch (e: Exception) {
+                android.util.Log.e("ChocoStock", "Erreur analyse Gemini", e)
                 _analysisState.value = AnalysisState.Error(e.message ?: "Erreur inconnue")
             }
         }
