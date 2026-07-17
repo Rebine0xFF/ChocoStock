@@ -10,5 +10,7 @@ data class ChocolateEntity(
     val coverImagePath: String?,
     val expiryPhotoPath: String?,
     val expiryDateIso: String?,
-    val dateAdded: Long
+    val dateAdded: Long,
+    val isAnalyzing: Boolean = false,
+    val analysisFailed: Boolean = false
 )

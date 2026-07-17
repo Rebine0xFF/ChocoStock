@@ -13,6 +13,10 @@ interface ChocolateDao {
     """)
     fun getAllSortedByExpiry(): Flow<List<ChocolateEntity>>
 
+    @Query("SELECT * FROM chocolates WHERE id = :id LIMIT 1")
+    suspend fun getById(id: String): ChocolateEntity?
+
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(chocolate: ChocolateEntity)
 

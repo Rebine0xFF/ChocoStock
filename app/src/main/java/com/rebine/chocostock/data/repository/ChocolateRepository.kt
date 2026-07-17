@@ -11,6 +11,9 @@ class ChocolateRepository(private val dao: ChocolateDao) {
     fun getAllSortedByExpiry(): Flow<List<Chocolate>> =
         dao.getAllSortedByExpiry().map { list -> list.map { it.toDomain() } }
 
+    suspend fun getById(id: String): Chocolate? = dao.getById(id)?.toDomain()
+
+
     suspend fun addChocolate(chocolate: Chocolate) {
         dao.insert(chocolate.toEntity())
     }
@@ -21,7 +24,7 @@ class ChocolateRepository(private val dao: ChocolateDao) {
 }
 
 private fun ChocolateEntity.toDomain() =
-    Chocolate(id, title, coverImagePath, expiryPhotoPath, expiryDateIso, dateAdded)
+    Chocolate(id, title, coverImagePath, expiryPhotoPath, expiryDateIso, dateAdded, isAnalyzing, analysisFailed)
 
 private fun Chocolate.toEntity() =
-    ChocolateEntity(id, title, coverImagePath, expiryPhotoPath, expiryDateIso, dateAdded)
+    ChocolateEntity(id, title, coverImagePath, expiryPhotoPath, expiryDateIso, dateAdded, isAnalyzing, analysisFailed)
