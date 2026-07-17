@@ -14,6 +14,9 @@ import com.rebine.chocostock.presentation.add.AddChocolateViewModelFactory
 import com.rebine.chocostock.presentation.list.ChocolateListScreen
 import com.rebine.chocostock.presentation.list.ChocolateListViewModel
 import com.rebine.chocostock.presentation.list.ChocolateListViewModelFactory
+import com.rebine.chocostock.presentation.edit.EditChocolateScreen
+import com.rebine.chocostock.presentation.edit.EditChocolateViewModel
+import com.rebine.chocostock.presentation.edit.EditChocolateViewModelFactory
 import com.rebine.chocostock.ui.theme.ChocoStockTheme
 
 class MainActivity : ComponentActivity() {
@@ -27,20 +30,34 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(navController = navController, startDestination = "list") {
                     composable("list") {
+                        val application = LocalContext.current.applicationContext as ChocoStockApplication
                         val viewModel: ChocolateListViewModel = viewModel(
-                            factory = ChocolateListViewModelFactory(repository)
+                            factory = ChocolateListViewModelFactory(application.repository)
                         )
                         ChocolateListScreen(
                             viewModel = viewModel,
-                            onAddClick = { navController.navigate("add") }
+                            onAddClick = { navController.navigate("add") },
+                            onEditClick = { id -> navController.navigate("edit/$id") }
                         )
                     }
                     composable("add") {
                         val application = LocalContext.current.applicationContext as ChocoStockApplication
                         val viewModel: AddChocolateViewModel = viewModel(
-                            factory = AddChocolateViewModelFactory(application.repository, application.geminiApiService)
+                            factory = AddChocolateViewModelFactory(application.repository, application.analysisCoordinator)
                         )
                         AddChocolateScreen(
+                            viewModel = viewModel,
+                            onSaved = { navController.popBackStack() }
+                        )
+                    }
+                    composable("edit/{chocolateId}") { backStackEntry ->
+                        val chocolateId = backStackEntry.arguments?.getString("chocolateId") ?: return@composable
+                        val application = LocalContext.current.applicationContext as ChocoStockApplication
+                        val viewModel: EditChocolateViewModel = viewModel(
+                            factory = EditChocolateViewModelFactory(application.repository)
+                        )
+                        EditChocolateScreen(
+                            chocolateId = chocolateId,
                             viewModel = viewModel,
                             onSaved = { navController.popBackStack() },
                             onCancel = { navController.popBackStack() }

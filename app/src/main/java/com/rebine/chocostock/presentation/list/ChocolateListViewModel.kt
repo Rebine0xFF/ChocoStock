@@ -15,6 +15,10 @@ class ChocolateListViewModel(private val repository: ChocolateRepository) : View
 
     val chocolates: StateFlow<List<Chocolate>> = repository.getAllSortedByExpiry()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    fun deleteChocolate(chocolate: Chocolate) {
+        viewModelScope.launch { repository.removeChocolate(chocolate) }
+    }
 }
 
 class ChocolateListViewModelFactory(private val repository: ChocolateRepository) : ViewModelProvider.Factory {
