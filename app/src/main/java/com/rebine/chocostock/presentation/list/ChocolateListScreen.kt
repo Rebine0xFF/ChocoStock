@@ -16,6 +16,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.rebine.chocostock.domain.model.Chocolate
+import com.rebine.chocostock.presentation.common.DateFormatUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,7 +86,7 @@ fun ChocolateRow(
                 }
             }
             Text(
-                text = "Date limite : ${chocolate.expiryDateIso ?: "inconnue"}",
+                text = "Date limite : ${DateFormatUtils.formatForDisplay(chocolate.expiryDateIso)}",
                 style = MaterialTheme.typography.bodyMedium
             )
             if (chocolate.analysisFailed) {
