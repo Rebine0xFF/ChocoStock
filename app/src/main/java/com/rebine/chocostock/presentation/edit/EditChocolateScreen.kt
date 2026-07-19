@@ -1,10 +1,14 @@
 package com.rebine.chocostock.presentation.edit
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.rebine.chocostock.presentation.common.DateFormatUtils
 
 @Composable
 fun EditChocolateScreen(
@@ -21,6 +25,7 @@ fun EditChocolateScreen(
 
     var title by remember { mutableStateOf("") }
     var expiryDateIso by remember { mutableStateOf("") }
+    var showDatePicker by remember { mutableStateOf(false) }
 
     LaunchedEffect(chocolate) {
         chocolate?.let {
@@ -49,12 +54,52 @@ fun EditChocolateScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        OutlinedTextField(
-            value = expiryDateIso,
-            onValueChange = { expiryDateIso = it },
-            label = { Text("Date limite (AAAA-MM-JJ)") },
-            modifier = Modifier.fillMaxWidth()
-        )
+        Box {
+            OutlinedTextField(
+                value = DateFormatUtils.formatForEditField(expiryDateIso.ifBlank { null }),
+                onValueChange = {},
+                readOnly = true,
+                label = { Text("Date limite") },
+                trailingIcon = {
+                    Icon(Icons.Default.DateRange, contentDescription = "Choisir une date")
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+            // Capte les clics sur toute la zone du champ pour ouvrir le sélecteur
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .clickable { showDatePicker = true }
+            )
+        }
+
+        if (showDatePicker) {
+            val initialMillis = DateFormatUtils.parseIsoOrNull(expiryDateIso.ifBlank { null })
+                ?.atStartOfDay(java.time.ZoneOffset.UTC)
+                ?.toInstant()
+                ?.toEpochMilli()
+            val datePickerState = rememberDatePickerState(initialSelectedDateMillis = initialMillis)
+
+            DatePickerDialog(
+                onDismissRequest = { showDatePicker = false },
+                confirmButton = {
+                    TextButton(onClick = {
+                        datePickerState.selectedDateMillis?.let { millis ->
+                            expiryDateIso = java.time.Instant.ofEpochMilli(millis)
+                                .atZone(java.time.ZoneOffset.UTC)
+                                .toLocalDate()
+                                .toString() // format ISO AAAA-MM-JJ, garanti valide
+                        }
+                        showDatePicker = false
+                    }) { Text("Valider") }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDatePicker = false }) { Text("Annuler") }
+                }
+            ) {
+                DatePicker(state = datePickerState)
+            }
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
