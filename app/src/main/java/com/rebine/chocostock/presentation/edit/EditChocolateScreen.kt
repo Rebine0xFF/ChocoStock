@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.rebine.chocostock.presentation.common.DateFormatUtils
+import com.rebine.chocostock.domain.ChocolateValidator
 
 @Composable
 fun EditChocolateScreen(
@@ -109,8 +110,8 @@ fun EditChocolateScreen(
             }
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                onClick = { viewModel.save(title, expiryDateIso.ifBlank { null }, onSaved) },
-                enabled = title.isNotBlank(),
+                onClick = { viewModel.save(ChocolateValidator.sanitizeTitle(title), expiryDateIso.ifBlank { null }, onSaved) },
+                enabled = ChocolateValidator.isTitleValid(title),
                 modifier = Modifier.weight(1f)
             ) {
                 Text("Enregistrer")

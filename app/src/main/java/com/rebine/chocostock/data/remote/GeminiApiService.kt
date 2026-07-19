@@ -58,7 +58,7 @@ class GeminiApiService(private val apiKey: String) {
                     throw IllegalStateException("Erreur API Gemini (${response.code}) : $bodyString")
                 }
 
-                parseResponse(bodyString)
+                GeminiResponseParser.parse(bodyString)
             }
         }
 
@@ -128,22 +128,5 @@ class GeminiApiService(private val apiKey: String) {
                 put("thinkingConfig", JSONObject().put("thinkingLevel", "minimal"))
             })
         }
-    }
-
-    private fun parseResponse(bodyString: String): ChocolateAnalysisResult {
-        val root = JSONObject(bodyString)
-        val text = root
-            .getJSONArray("candidates")
-            .getJSONObject(0)
-            .getJSONObject("content")
-            .getJSONArray("parts")
-            .getJSONObject(0)
-            .getString("text")
-
-        val parsed = JSONObject(text)
-        return ChocolateAnalysisResult(
-            title = parsed.getString("titre"),
-            expiryDateIso = parsed.getString("date_peremption").ifBlank { null }
-        )
     }
 }
