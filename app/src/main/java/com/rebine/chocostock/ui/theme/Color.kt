@@ -2,10 +2,12 @@ package com.rebine.chocostock.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val Cocoa = Color(0xFF3D2418)       // dark chocolate brown: primary text, TopAppBar
+val Praline = Color(0xFFA9714A)     // warm praline brown: add button
+val Cream = Color(0xFFFAF1E4)       // cream background, chocolate box paper
+val DarkCream = Color(0xFFF0E4D3)   // slightly darker, for cards on the cream background
+val Gold = Color(0xFFC9A961)        // golden, used sparingly
+val CherryRed = Color(0xFFB33A3A)   // "consume soon" indicator
+val MossGreen = Color(0xFF6B8E5A)   // "plenty of time" indicator
+val WarmInk = Color(0xFF6B5B4F)     // secondary text (warm grey-brown rather than neutral grey)
