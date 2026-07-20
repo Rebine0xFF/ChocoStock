@@ -45,7 +45,10 @@ fun ChocolateListScreen(
                 Text("Aucun chocolat en stock. Appuie sur + pour en ajouter un.")
             }
         } else {
-            LazyColumn(modifier = Modifier.fillMaxSize().padding(padding)) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize().padding(padding),
+                contentPadding = PaddingValues(top = 12.dp, bottom = 12.dp)
+            ) {
                 items(chocolates, key = { it.id }) { chocolate ->
                     ChocolateRow(
                         chocolate = chocolate,
@@ -76,7 +79,7 @@ fun ChocolateRow(
     }
 
     Card(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 6.dp),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -117,11 +120,13 @@ fun ChocolateRow(
                 }
             }
 
-            IconButton(onClick = onEditClick) {
-                Icon(Icons.Default.Edit, contentDescription = "Modifier", tint = WarmInk)
-            }
-            IconButton(onClick = { showDeleteConfirm = true }) {
-                Icon(Icons.Default.Delete, contentDescription = "Retirer du stock", tint = WarmInk)
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                IconButton(onClick = onEditClick) {
+                    Icon(Icons.Default.Edit, contentDescription = "Modifier", tint = WarmInk)
+                }
+                IconButton(onClick = { showDeleteConfirm = true }) {
+                    Icon(Icons.Default.Delete, contentDescription = "Retirer du stock", tint = WarmInk)
+                }
             }
         }
     }
