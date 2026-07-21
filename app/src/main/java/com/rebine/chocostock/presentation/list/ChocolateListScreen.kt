@@ -7,10 +7,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,6 +22,7 @@ import com.rebine.chocostock.domain.ExpiryUrgencyCalculator
 import com.rebine.chocostock.domain.model.Chocolate
 import com.rebine.chocostock.presentation.common.DateFormatUtils
 import com.rebine.chocostock.ui.theme.*
+import com.rebine.chocostock.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -125,7 +126,11 @@ fun ChocolateRow(
                     Icon(Icons.Default.Edit, contentDescription = "Modifier", tint = WarmInk)
                 }
                 IconButton(onClick = { showDeleteConfirm = true }) {
-                    Icon(Icons.Default.Delete, contentDescription = "Retirer du stock", tint = WarmInk)
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_chocolate_eat),
+                        contentDescription = "Consommé",
+                        tint = WarmInk
+                    )
                 }
             }
         }
@@ -137,10 +142,10 @@ fun ChocolateRow(
             title = { Text("Retirer ce chocolat du stock ?") },
             text = { Text("Cette action est définitive.") },
             confirmButton = {
-                TextButton(onClick = { onDeleteClick(); showDeleteConfirm = false }) { Text("Retirer") }
+                TextButton(onClick = { onDeleteClick(); showDeleteConfirm = false }) { Text("Oui, miam !") }
             },
             dismissButton = {
-                TextButton(onClick = { showDeleteConfirm = false }) { Text("Annuler") }
+                TextButton(onClick = { showDeleteConfirm = false }) { Text("Pas encore") }
             }
         )
     }
