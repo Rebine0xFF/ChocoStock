@@ -19,8 +19,7 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "chocostock.db"
-                ).fallbackToDestructiveMigration()
-                    .build().also { INSTANCE = it }
+                ).build().also { INSTANCE = it }
             }
         }
     }
