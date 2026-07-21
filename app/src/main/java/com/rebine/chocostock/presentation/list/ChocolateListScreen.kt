@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.painterResource
@@ -29,12 +30,22 @@ import com.rebine.chocostock.R
 fun ChocolateListScreen(
     viewModel: ChocolateListViewModel,
     onAddClick: () -> Unit,
-    onEditClick: (String) -> Unit
+    onEditClick: (String) -> Unit,
+    onSettingsClick: () -> Unit
 ) {
     val chocolates by viewModel.chocolates.collectAsState()
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Stock de chocolat 🍫🫠") }) },
+        topBar = {
+            TopAppBar(
+                title = { Text("Stock de chocolat 🍫🫠") },
+                actions = {
+                    IconButton(onClick = onSettingsClick) {
+                        Icon(Icons.Default.Settings, contentDescription = "Réglages")
+                    }
+                }
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(onClick = onAddClick) {
                 Icon(Icons.Default.Add, contentDescription = "Ajouter un chocolat")

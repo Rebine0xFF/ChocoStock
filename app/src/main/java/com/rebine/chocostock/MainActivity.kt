@@ -17,6 +17,9 @@ import com.rebine.chocostock.presentation.list.ChocolateListViewModelFactory
 import com.rebine.chocostock.presentation.edit.EditChocolateScreen
 import com.rebine.chocostock.presentation.edit.EditChocolateViewModel
 import com.rebine.chocostock.presentation.edit.EditChocolateViewModelFactory
+import com.rebine.chocostock.presentation.settings.SettingsScreen
+import com.rebine.chocostock.presentation.settings.SettingsViewModel
+import com.rebine.chocostock.presentation.settings.SettingsViewModelFactory
 import com.rebine.chocostock.ui.theme.ChocoStockTheme
 
 class MainActivity : ComponentActivity() {
@@ -37,7 +40,8 @@ class MainActivity : ComponentActivity() {
                         ChocolateListScreen(
                             viewModel = viewModel,
                             onAddClick = { navController.navigate("add") },
-                            onEditClick = { id -> navController.navigate("edit/$id") }
+                            onEditClick = { id -> navController.navigate("edit/$id") },
+                            onSettingsClick = { navController.navigate("settings") }
                         )
                     }
                     composable("add") {
@@ -62,6 +66,13 @@ class MainActivity : ComponentActivity() {
                             onSaved = { navController.popBackStack() },
                             onCancel = { navController.popBackStack() }
                         )
+                    }
+                    composable("settings") {
+                        val application = LocalContext.current.applicationContext as ChocoStockApplication
+                        val viewModel: SettingsViewModel = viewModel(
+                            factory = SettingsViewModelFactory(application.apiKeyRepository)
+                        )
+                        SettingsScreen(viewModel = viewModel)
                     }
                 }
             }
