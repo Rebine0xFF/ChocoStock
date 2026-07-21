@@ -1,10 +1,3 @@
-import java.io.FileInputStream
-import java.util.Properties
-
-val localProperties = Properties().apply {
-    load(FileInputStream(rootProject.file("local.properties")))
-}
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -27,8 +20,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField("String", "GEMINI_API_KEY", "\"${localProperties.getProperty("GEMINI_API_KEY") ?: ""}\"")
     }
 
     buildTypes {
@@ -85,4 +76,6 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.6.0")
 
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
 }

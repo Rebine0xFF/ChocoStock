@@ -2,6 +2,7 @@ package com.rebine.chocostock
 
 import android.app.Application
 import com.rebine.chocostock.data.files.ImageStorageManager
+import com.rebine.chocostock.data.local.ApiKeyRepository
 import com.rebine.chocostock.data.local.AppDatabase
 import com.rebine.chocostock.data.remote.ChocolateAnalysisCoordinator
 import com.rebine.chocostock.data.remote.GeminiApiService
@@ -18,7 +19,8 @@ class ChocoStockApplication : Application() {
         private set
 
     val imageStorageManager by lazy { ImageStorageManager(this) }
-    val geminiApiService by lazy { GeminiApiService(BuildConfig.GEMINI_API_KEY) }
+    val geminiApiService by lazy { GeminiApiService() }
+    val apiKeyRepository by lazy { ApiKeyRepository(this) }
 
     lateinit var analysisCoordinator: ChocolateAnalysisCoordinator
         private set
@@ -27,6 +29,6 @@ class ChocoStockApplication : Application() {
         super.onCreate()
         val database = AppDatabase.getInstance(this)
         repository = ChocolateRepository(database.chocolateDao())
-        analysisCoordinator = ChocolateAnalysisCoordinator(repository, geminiApiService, applicationScope)
+        analysisCoordinator = ChocolateAnalysisCoordinator(repository, geminiApiService, apiKeyRepository, applicationScope)
     }
 }

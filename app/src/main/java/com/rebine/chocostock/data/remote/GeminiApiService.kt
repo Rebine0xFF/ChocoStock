@@ -16,7 +16,7 @@ data class ChocolateAnalysisResult(
     val expiryDateIso: String?
 )
 
-class GeminiApiService(private val apiKey: String) {
+class GeminiApiService {
 
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
@@ -40,7 +40,7 @@ class GeminiApiService(private val apiKey: String) {
         Règle importante : n'invente jamais une information qui n'est pas clairement visible sur les images. Si la date est illisible, partiellement cachée, ou absente de l'image, renvoie une chaîne vide "" pour ce champ.
     """.trimIndent()
 
-    suspend fun analyzeChocolate(coverPhoto: File, expiryPhoto: File): ChocolateAnalysisResult =
+    suspend fun analyzeChocolate(coverPhoto: File, expiryPhoto: File, apiKey: String): ChocolateAnalysisResult =
         withContext(Dispatchers.IO) {
             val body = buildRequestBody(coverPhoto, expiryPhoto)
 
