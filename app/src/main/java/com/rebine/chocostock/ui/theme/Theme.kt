@@ -23,7 +23,10 @@ private val ChocoStockColors = lightColorScheme(
     onSurface = Cocoa,
     onSurfaceVariant = WarmInk,
     error = CherryRed,
-    onError = Cream
+    onError = Cream,
+
+    primaryContainer = Praline,
+    onPrimaryContainer = Cream,
 )
 
 @Composable
