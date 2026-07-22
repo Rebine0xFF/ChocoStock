@@ -25,3 +25,20 @@
 
 ---
 
+## Overview
+
+ChocoStock keeps track of your chocolate stock. Take a photo of the packaging and a close-up of the expiry date. Gemini Flash identifies the product and reads the date automatically. The list is always sorted by expiry date, so you always know what to eat first.
+
+## Features
+
+- **Two-photo capture flow :** front of the packaging + expiry date close-up
+- **AI-powered recognition :** automatic product title and expiry date extraction
+- **Background analysis :** items appear in the list instantly, AI processing happens asynchronously
+- **Sorted by expiry date :** closest expiry always on top
+- **Manual editing :** override the AI's title or date at any time
+- **Bring your own API key :** your Gemini key stays local on your device
+
+## Demo
+
+*demo gif*
+
