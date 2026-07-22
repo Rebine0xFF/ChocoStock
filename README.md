@@ -42,3 +42,27 @@ ChocoStock keeps track of your chocolate stock. Take a photo of the packaging an
 
 *demo gif*
 
+## Tech stack
+
+*table*
+
+## Installation
+
+### Download the APK
+
+1. Go to the [Releases](../../releases) page and download the latest `.apk`
+2. Enable "Install from unknown sources" for your file manager or browser
+3. Install the APK
+4. Get a free API key at [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
+5. Open the app, go to **Settings**, and paste your API key
+
+### OR Build from source
+
+```bash
+git clone https://github.com/Rebine0xFF/ChocoStock.git
+```
+
+1. Open the project in Android Studio
+2. Let Gradle sync the dependencies
+3. Run the app on an emulator or a physical device
+4. Get a free API key at [aistudio.google.com/apikey](https://aistudio.google.com/apikey) and paste it in the app's **Settings** screen
