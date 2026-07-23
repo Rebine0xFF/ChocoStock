@@ -35,7 +35,7 @@ class GeminiApiService {
 
         À partir de la première image, génère un titre court, synthétique et descriptif du produit : marque + type de produit + variante si elle est visible (par exemple "Lindt Excellence 70% Cacao" ou "Ferrero Rocher, boîte 24 pièces"). Le titre ne doit pas dépasser 60 caractères.
 
-        À partir de la seconde image, lis la date de péremption et retranscris-la strictement au format ISO AAAA-MM-JJ. Si seul le mois est précisé (par exemple "MM/AAAA"), utilise le dernier jour de ce mois. Si la date est illisible, partiellement cachée, ou absente de l'image, renvoie null pour ce champ.
+        À partir de la seconde image, lis la date de péremption et retranscris-la strictement au format ISO AAAA-MM-JJ. Si seul le mois est précisé (par exemple "MM/AAAA"), utilise le dernier jour de ce mois.
 
         Règle importante : n'invente jamais une information qui n'est pas clairement visible sur les images. Si la date est illisible, partiellement cachée, ou absente de l'image, renvoie une chaîne vide "" pour ce champ.
     """.trimIndent()
