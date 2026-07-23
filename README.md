@@ -1,5 +1,5 @@
 <div align="right">
-  <a href="README_Fr.md">🇫🇷 Lire en français</a>
+  <a href="README_FR.md">🇫🇷 Lire en français</a>
 </div>
 <div align="center">
   <h1>ChocoStock</h1>
@@ -18,8 +18,9 @@
   <p align="center">
     <img src="https://img.shields.io/github/last-commit/Rebine0xFF/ChocoStock?style=flat-square" alt="GitHub last commit">
     <img src="https://img.shields.io/github/languages/code-size/Rebine0xFF/ChocoStock" alt="GitHub code size in bytes">
-    <img src="https://img.shields.io/github/languages/top/Rebine0xFF/ChocoStock?style=flat-square" alt="GitHub top language">
     <img src="https://img.shields.io/github/commit-activity/m/Rebine0xFF/ChocoStock?style=flat-square" alt="GitHub commit activity">
+    <img src="https://img.shields.io/github/v/release/Rebine0xFF/ChocoStock?style=flat-square&label=latest%20release" alt="Latest release">
+    <img src="https://img.shields.io/badge/Min%20SDK-26-blue?style=flat-square" alt="Min SDK">
   </p>
 </div>
 
@@ -44,7 +45,19 @@ ChocoStock keeps track of your chocolate stock. Take a photo of the packaging an
 
 ## Tech stack
 
-*table*
+| Layer | Technology |
+|---|---|
+| Language | Kotlin |
+| UI | Jetpack Compose (Material 3) |
+| Architecture | MVVM + Repository pattern |
+| Local database | Room |
+| Camera capture | CameraX |
+| Networking | OkHttp |
+| Image loading | Coil |
+| Local settings storage | DataStore Preferences |
+| Navigation | Navigation Compose |
+| AI vision & OCR | Google Gemini API (`gemini-3.1-flash-lite`) |
+| Testing | JUnit (unit tests) · AndroidX Test + in-memory Room database (instrumented tests) |
 
 ## Installation
 
