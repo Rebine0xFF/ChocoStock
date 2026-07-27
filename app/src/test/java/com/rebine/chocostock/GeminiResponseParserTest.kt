@@ -1,6 +1,8 @@
 package com.rebine.chocostock
 
+import com.rebine.chocostock.data.remote.GeminiApiException
 import com.rebine.chocostock.data.remote.GeminiResponseParser
+import com.rebine.chocostock.data.remote.InvalidApiKeyException
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -34,6 +36,27 @@ class GeminiResponseParserTest {
         }
     """.trimIndent()
 
+    private val invalidKeyErrorBody = """
+    {
+      "error": {
+        "code": 400,
+        "message": "API key not valid. Please pass a valid API key.",
+        "status": "INVALID_ARGUMENT"
+      }
+    }
+""".trimIndent()
+
+    private val genericErrorBody = """
+    {
+      "error": {
+        "code": 500,
+        "message": "Internal error occurred",
+        "status": "INTERNAL"
+      }
+    }
+""".trimIndent()
+
+
     private val noCandidatesResponse = """{ "candidates": [] }"""
 
     @Test
@@ -52,5 +75,20 @@ class GeminiResponseParserTest {
     @Test(expected = IllegalStateException::class)
     fun `parse with no candidate throws an exception`() {
         GeminiResponseParser.parse(noCandidatesResponse)
+    }
+
+    @Test(expected = InvalidApiKeyException::class)
+    fun `throwForErrorResponse avec un message de cle invalide leve InvalidApiKeyException`() {
+        GeminiResponseParser.throwForErrorResponse(400, invalidKeyErrorBody)
+    }
+
+    @Test(expected = InvalidApiKeyException::class)
+    fun `throwForErrorResponse avec un code 403 leve InvalidApiKeyException`() {
+        GeminiResponseParser.throwForErrorResponse(403, genericErrorBody)
+    }
+
+    @Test(expected = GeminiApiException::class)
+    fun `throwForErrorResponse avec une erreur generique leve GeminiApiException`() {
+        GeminiResponseParser.throwForErrorResponse(500, genericErrorBody)
     }
 }

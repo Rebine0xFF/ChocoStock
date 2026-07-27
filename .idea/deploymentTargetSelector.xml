@@ -6,7 +6,7 @@
         <option name="selectionMode" value="DROPDOWN" />
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="ChocolateDaoSortingTest">
+      <SelectionState runConfigName="Tests in 'com.rebine.chocostock'">
         <option name="selectionMode" value="DROPDOWN" />
         <DialogSelection />
       </SelectionState>
