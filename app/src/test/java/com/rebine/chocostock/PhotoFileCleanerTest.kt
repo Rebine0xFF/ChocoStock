@@ -9,7 +9,7 @@ import java.io.File
 class PhotoFileCleanerTest {
 
     @Test
-    fun `deleteIfExists supprime un fichier existant`() {
+    fun `deleteIfExists deletes an existing file`() {
         val tempFile = File.createTempFile("chocostock_test", ".jpg")
         assertTrue(tempFile.exists())
 
@@ -19,17 +19,17 @@ class PhotoFileCleanerTest {
     }
 
     @Test
-    fun `deleteIfExists ne fait rien avec un chemin null`() {
-        PhotoFileCleaner.deleteIfExists(null) // ne doit pas lever d'exception
+    fun `deleteIfExists does nothing with null path`() {
+        PhotoFileCleaner.deleteIfExists(null) // should not throw exception
     }
 
     @Test
-    fun `deleteIfExists ne fait rien avec un chemin vide`() {
-        PhotoFileCleaner.deleteIfExists("   ") // ne doit pas lever d'exception
+    fun `deleteIfExists does nothing with empty path`() {
+        PhotoFileCleaner.deleteIfExists("   ") // should not throw exception
     }
 
     @Test
-    fun `deleteIfExists ne fait rien si le fichier n'existe pas`() {
-        PhotoFileCleaner.deleteIfExists("/chemin/inexistant/fichier.jpg") // ne doit pas lever d'exception
+    fun `deleteIfExists does nothing if file does not exist`() {
+        PhotoFileCleaner.deleteIfExists("/non/existent/path/file.jpg") // should not throw exception
     }
 }

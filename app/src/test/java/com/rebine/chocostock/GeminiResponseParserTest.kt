@@ -78,17 +78,17 @@ class GeminiResponseParserTest {
     }
 
     @Test(expected = InvalidApiKeyException::class)
-    fun `throwForErrorResponse avec un message de cle invalide leve InvalidApiKeyException`() {
+    fun `throwForErrorResponse with invalid key message throws InvalidApiKeyException`() {
         GeminiResponseParser.throwForErrorResponse(400, invalidKeyErrorBody)
     }
 
     @Test(expected = InvalidApiKeyException::class)
-    fun `throwForErrorResponse avec un code 403 leve InvalidApiKeyException`() {
+    fun `throwForErrorResponse with 403 code throws InvalidApiKeyException`() {
         GeminiResponseParser.throwForErrorResponse(403, genericErrorBody)
     }
 
     @Test(expected = GeminiApiException::class)
-    fun `throwForErrorResponse avec une erreur generique leve GeminiApiException`() {
+    fun `throwForErrorResponse with generic error throws GeminiApiException`() {
         GeminiResponseParser.throwForErrorResponse(500, genericErrorBody)
     }
 }
