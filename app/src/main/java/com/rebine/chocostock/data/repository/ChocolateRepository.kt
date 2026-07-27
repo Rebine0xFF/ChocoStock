@@ -3,6 +3,7 @@ package com.rebine.chocostock.data.repository
 import com.rebine.chocostock.data.local.ChocolateDao
 import com.rebine.chocostock.data.local.ChocolateEntity
 import com.rebine.chocostock.domain.model.Chocolate
+import com.rebine.chocostock.data.files.PhotoFileCleaner
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -20,6 +21,8 @@ class ChocolateRepository(private val dao: ChocolateDao) {
 
     suspend fun removeChocolate(chocolate: Chocolate) {
         dao.delete(chocolate.toEntity())
+        PhotoFileCleaner.deleteIfExists(chocolate.coverImagePath)
+        PhotoFileCleaner.deleteIfExists(chocolate.expiryPhotoPath)
     }
 }
 
