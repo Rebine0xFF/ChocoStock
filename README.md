@@ -41,7 +41,7 @@ ChocoStock keeps track of your chocolate stock. Take a photo of the packaging an
 
 ## Demo
 
-*demo gif*
+https://github.com/user-attachments/assets/b9d07d20-35f1-4dbe-bc62-ca8eb5938295
 
 ## Tech stack
 
