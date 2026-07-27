@@ -55,7 +55,7 @@ class GeminiApiService {
                     ?: throw IllegalStateException("Réponse vide de l'API Gemini")
 
                 if (!response.isSuccessful) {
-                    throw IllegalStateException("Erreur API Gemini (${response.code}) : $bodyString")
+                    GeminiResponseParser.throwForErrorResponse(response.code, bodyString)
                 }
 
                 GeminiResponseParser.parse(bodyString)

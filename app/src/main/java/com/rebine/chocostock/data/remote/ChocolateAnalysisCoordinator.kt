@@ -20,7 +20,7 @@ class ChocolateAnalysisCoordinator(
 
             val updated = try {
                 if (apiKey.isNullOrBlank()) {
-                    throw IllegalStateException("Aucune clé API Gemini indiquée. Va dans Réglages pour l'ajouter.")
+                    throw MissingApiKeyException("Aucune clé API Gemini renseignée.")
                 }
                 val result = geminiApiService.analyzeChocolate(coverPhoto, expiryPhoto, apiKey)
                 current.copy(
@@ -29,13 +29,15 @@ class ChocolateAnalysisCoordinator(
                     isAnalyzing = false,
                     analysisFailed = false
                 )
+            } catch (e: MissingApiKeyException) {
+                android.util.Log.e("ChocoStock", "Clé API manquante", e)
+                current.copy(title = "Aucune clé API, va dans Réglages", isAnalyzing = false, analysisFailed = true)
+            } catch (e: InvalidApiKeyException) {
+                android.util.Log.e("ChocoStock", "Clé API invalide", e)
+                current.copy(title = "Clé API invalide, vérifie Réglages", isAnalyzing = false, analysisFailed = true)
             } catch (e: Exception) {
                 android.util.Log.e("ChocoStock", "Erreur analyse Gemini", e)
-                current.copy(
-                    title = "Analyse échouée, modifie les infos",
-                    isAnalyzing = false,
-                    analysisFailed = true
-                )
+                current.copy(title = "Analyse échouée, modifie les infos", isAnalyzing = false, analysisFailed = true)
             }
             repository.addChocolate(updated)
         }
