@@ -56,7 +56,7 @@ ChocoStock keeps track of your chocolate stock. Take a photo of the packaging an
 | Image loading | Coil |
 | Local settings storage | DataStore Preferences |
 | Navigation | Navigation Compose |
-| AI vision & OCR | Google Gemini API (`gemini-3.1-flash-lite`) |
+| AI vision & OCR | Google Gemini API (`gemini-3.5-flash-lite`) |
 | Testing | JUnit (unit tests) · AndroidX Test + in-memory Room database (instrumented tests) |
 
 ## Installation
