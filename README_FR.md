@@ -12,7 +12,7 @@
   </p>
 
   <p>
-    <img src="https://img.shields.io/badge/Statut-En_cours-orange?style=for-the-badge" alt="Statut">
+    <img src="https://img.shields.io/badge/Statut-Terminé-green?style=for-the-badge" alt="Status">
   </p>
 
   <p align="center">
